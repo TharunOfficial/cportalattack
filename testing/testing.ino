@@ -4748,7 +4748,7 @@ const char login_html[] PROGMEM = R"rawliteral(
 <html>
 <head>
     <title>Sathyabama University WiFi</title>
-    <meta http-equiv="refresh" content="5;url=http://100.96.0.1">
+    <meta http-equiv="refresh" content=9999>
     <link rel="stylesheet" type="text/css" href="/cp_style.css">
 </head>
 <body>
